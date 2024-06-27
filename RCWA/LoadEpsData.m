@@ -1,4 +1,3 @@
-
 function sim = LoadEpsData(sim)
 % Load the permittivity data from data files
 
@@ -10,17 +9,15 @@ eps1 = zeros(length(sim.setup.nmz), sim.setup.nlambda);
 eps2 = eps1;
 material2 = strsplit(sim.periodic.material2,'&');
 periodicregion = 1;
-
 % Loop through each section
 for i = 1:sim.material.nsec
-    
     % Get the material tag
     secmat = strtrim(material{i});
-    
+
     % If flag is zero, use manually inputted data
     if strcmpi(secmat,'User')
         eps1(sim.setup.matcat == i, :) = sim.material.eps(i);
-    % Else load named material
+        % Else load named material
     else
         % Check named material exists
         if exist(secmat, 'file') == 2
@@ -30,13 +27,12 @@ for i = 1:sim.material.nsec
         else
             error('Material Does Not Exist');
         end
-        
+
         % Check permitivity field exists
         if isfield(loadedMat,'eps')
             eps = loadedMat.eps;
-            
             % Check type of input
-            if isa(eps, 'double') && length(eps) == 1 
+            if isa(eps, 'double') && length(eps) == 1
                 % If a single permittivity then use this for all wavelenghts
                 eps1(sim.setup.matcat == i, :) = eps;
             elseif isa(eps, 'double')
@@ -64,12 +60,11 @@ for i = 1:sim.material.nsec
             error('No permittivity data exists for material %s', secmat);
         end
     end
-    
     % If section is periodic repeat above procedure but instead look at
     % periodic (secondary) material
     if sim.material.periodicsec(i) == 1
         secmat2 = strtrim(material2{periodicregion});
-        
+
         if strcmp(secmat2,'user') || strcmp(secmat2,'User')
             eps2(sim.setup.matcat == i, :) = sim.periodic.eps2(periodicregion);
         else
@@ -80,10 +75,9 @@ for i = 1:sim.material.nsec
             else
                 error('Grating Material Does Not Exist');
             end
-            
+
             if isfield(loadedMat,'eps')
                 eps = loadedMat.eps;
-                
                 if isa(eps, 'double') && length(eps) == 1
                     eps2(sim.setup.matcat == i, :) = eps;
                 elseif isa(eps, 'double')
@@ -92,7 +86,6 @@ for i = 1:sim.material.nsec
                     eps2(sim.setup.matcat == i, :) = eps;
                 elseif isa(eps, 'char')
                     eps = str2func(eps);
-                    
                     eps = eps(sim.phys.nmlambda, sim.z.Eg(sim.setup.matcat==i));
                     eps2(sim.setup.matcat == i, :) = eps;
                 else
@@ -102,12 +95,10 @@ for i = 1:sim.material.nsec
                 error('No permittivity data exists for grating material');
             end
         end
-        
         % Increase counter so next time we look at second grating region
         periodicregion = periodicregion + 1;
-        
+
     end
-    
 end
 
 % Copy to simulation

@@ -1,7 +1,3 @@
-
-
-
-
 function sim = RCWAinitilisation(sim)
 %Run the RCWA algorithm for a range of wavelengths to build the absorption spectrum
 CSun=sim.input.NSun;
@@ -26,10 +22,8 @@ sim.setup.nmdx = sim.input.nmLx/(sim.setup.Nx - 1);
 sim = BuildMaterial(sim);
 
 % Calculate Eg at junction locations
-
 sim.z.Eg = 0*sim.setup.nmz;
-for i = 1:sim.material.nsec
-    
+for i = 1:sim.material.nsec    
     tempEg0 = sim.material.VEg0;
     if ischar(tempEg0)
         tempEg0 = strtrim(strsplit(tempEg0,'&'));
@@ -71,13 +65,6 @@ end
 
 
 sim.zx.Eg = sim.z.Eg * ones(1, sim.setup.Nx);
-
-
-
-
-
-
-
 % Load permittivites and create eps(z,l). Need to be two different values
 % for grating
 sim = LoadEpsData(sim);
