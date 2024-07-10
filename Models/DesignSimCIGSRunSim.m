@@ -4,10 +4,7 @@ function sim = DesignSimCIGSRunSim(sim)
 sim.optical.setup = struct(...
      ... % Optical Parameters
     'optical_toggle', 1, ... % Toggle: 1 to run optical simulation, 0 to skip
-    'BLL',0, ... % 1 for Beer--Lambert law and 0 for RCWA
-    'parforArg', 0, ...   % Numer of parallel agents (ignore)
-    'epsmethod', 2, ...     % Formulaton used for eps in RCWA (2 For optimal, 1 for F(eps) and 0 (r) for invF(1/eps))
-    'iepsmethod', 2, ...    % Formulaton used for ieps in RCWA (2 For optimal, 1 (r) for F(ieps) and 0 for invF(eps))
+    'BLL',0, ... % 1 for Beer--Lambert law and 0 for RCWA 
     'Ez_A_or_iE', 0, ...    % Choice for rebuilding Ez from Hy, 0 for A, 1 for iE
     'pol', 0, ...               % 0: Unpolarized, 1: p-polarized, 2: s-polarized
     ... % Analysis Options
@@ -17,20 +14,23 @@ sim.optical.setup = struct(...
     'epsplot', 0, ... Plot permittivity
     'Eplot', 0, ... Plot Efield
     'Hplot', 0, ... Plot Hfield
-    ... % Mesh for angle and wavelength
-    'degtheta0', 0, ...     % Minimum angle of Incident Light (not implemented)
-    'degtheta1', 0, ...     % Maximum angle of Incident Light (not implemented)
-    'ntheta', 1, ...        % Number of angles (not implemented)
+    ... % Mesh for angle  (following is untested)
+    'degtheta0', 0, ...     % Minimum angle of Incident Light 
+    'degtheta1', 0, ...     % Maximum angle of Incident Light 
+    'ntheta', 1, ...        % Number of angles 
+    ... % Mesh for wavelength
     'nmlambda0', 301, ...   % Minimum wavelength in nm
     'nmlambda1', 1200, ...  % Maximum wavelength in nm
     'nlambda', 1 + floor((1200-301)/10), ...     % Number of wavelengths
-    'Nx', 100, ...       % Number sample points in x-direction
+    ... % discretization along x direction 
+    'Nx', 100, ...       % Number sample points in x-direction (for plotting)
     'nslices', [1, 1,1,100,35,250,1,1, 1], ... % Number of slices in each sec (DesignJunction.m), uses 1 if not set.
-    ... % Parameters for Nt convergence
+    ... % Parameters for Nt convergence 
+... % Do we ever use this?  No!!
     'CheckNtConvergence', 0, ... Use adaptive Nt (Use at own risk)
     'Nttol', 1e9,...      % Required tolerance in mA/(nm cm^2) for increasing Nt by 2
     'Nttol_lower', 1e-6, ...%  Required tolerance in mA/(nm cm^2) for decreasing Nt by 2 (used in serial calcs)
-    'minNt', 10, ...         % Start value for Nt (tom:40)
+    'minNt', 10, ...         % Start value for Nt (tom:40)  %  number of Floquet harmonics for RCWA
     'maxNt', 40, ...        % Largest value for Nt (tom:40)
     'nosuccreq', 2, ... % Number of successes required
     'faillimit', 10, ... % Number of times worse before fail
@@ -40,16 +40,21 @@ sim.optical.setup = struct(...
 sim.electrical.setup = struct(...
     ... % Electrical Parameters
     'electrical_toggle', 1, ... % Toggle: 1 to run electrical simulation, 0 to skip
-    'pdeg',5, ... % Polynomial degree
     'VdV', 0.01, ... % Change in volrage 
-    'rerunbackward', 0, ... % Recalculate JV backward to check convergence via hystersis
     ... % Simulation meshing
     'nslices', [1, 1,1,100,35,250,5,5, 1], ... % Number of slices in each sec (DesignJunction.m
+    'nx_sec', [100,35,250], ... % Number of mesh points in each section (electrical)
+    ...%Use FD or HDG method
+    'FD', 1 , ... %Use the FD method(1) or 0 to use HDG
+   ... % Start HDG parameters
+    'pdeg',5, ... % Polynomial degree
+... % what is this for  (take out)
+    'rerunbackward', 0, ... % Recalculate JV backward to check convergence via hystersis
+ ... # remove?
     'nmdz', 2, ... % Approx. resolution of mesh (disabled)
-    'nx_sec', [100,35,250], ... % Number of mesh points in each section
     'meshfn' , '1', ...& sin(pi*x)+0.01 , ... % Function to specify relative lengths of each segment, scales to match Lz. 1 for uniform
     ... % Global polys. The poly ax^2+bx+c -> [a, b, c], for example.
-    'upwind', 1, ...  % If toggled, will ignore value of t and upwind
+    'upwind', 1, ...  % If toggled, will ignore value of t and upwind (HDG only)
     'tensor', 0, ... % Uses tensors internally
     't_1', 1e-6, ...
     't_2', 1e3, ...
@@ -84,12 +89,11 @@ sim.electrical.setup = struct(...
     'abstol', 1e-1, ... % Required absolute tolerance   
     'warn', 1, ... % Display warning messages
     'Jtol', 0.4, ... Standard is 0.1. Larger values allow more noisy J profile.
+... % do we do this
     'forcepositive', 0, ... % Force the carriers to be positive
     'test_J', 0, ... %Test the Jacobian
     'PVrefinemax', 100, ... % Max refinement steps allowed
-    'PVtol', 1e-3, ... % Tolerance for finding Pmax
-    ...%Use FD method
-    'FD', 1 ... %Use the FD method(1) or 0 to use HDG
+    'PVtol', 1e-3 ... % Tolerance for finding Pmax
 );
 
 

@@ -89,26 +89,17 @@ end
 epsz = 0;
 iepsz = 0;
 
-% Check flag for best method
-if sim.setup.epsmethod == 2
-    if sim.setup.pol == 1 % s-polarization use (1,0)
-        epsmethod = 1;       
-    else % p-polarization use (0,0)
-        epsmethod = 0;       
-    end
-else
-    epsmethod = sim.setup.epsmethod;
+% flags for best RCWA method for each polarization
+if sim.setup.pol == 1 % s-polarization use (1,0)
+    epsmethod = 1;
+else % p-polarization use (0,0)
+    epsmethod = 0;
 end
 
-
-if sim.setup.iepsmethod == 2
-    if sim.setup.pol == 1 % s-polarization use (1,0)
-        iepsmethod = 0;       
-    else % p-polarization use (0,0)
-        iepsmethod = 0;       
-    end
-else
-    iepsmethod = sim.setup.iepsmethod;
+if sim.setup.pol == 1 % s-polarization use (1,0)
+    iepsmethod = 0;
+else % p-polarization use (0,0)
+    iepsmethod = 0;
 end
 
 

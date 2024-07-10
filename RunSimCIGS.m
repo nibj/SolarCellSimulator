@@ -14,7 +14,8 @@ sim = DesignJunctionCIGSRunSim();
 sim = DesignSimCIGSRunSim(sim);
 CSun=1;
 
-ls=input("Please enter thickness of CIGS layer between 100 nm and 2200 nm: Ls= ");
+%ls=input("Please enter thickness of CIGS layer between 100 nm and 2200 nm: Ls= ");
+ls=200
 if ls >= 100 && ls <= 2200
     sim.material.nmSec(6)=ls;
 else
@@ -22,7 +23,8 @@ else
     return
 end
 
-Eg0=input("Please enter the bandgap Eg [0.947 1.626] (eV): ");
+%Eg0=input("Please enter the bandgap Eg [0.947 1.626] (eV): ");
+Eg0=1.1
 if Eg0 >=0.947  && Eg0 <= 1.626
     sim.material.VEg0(6) = Eg0;
 else
@@ -30,7 +32,8 @@ else
     return
 end
 
-
+% Since bandgap isan input, we need to compute bandgap dependent parameters
+% in the model
 xxeg0=sim.material.VEg0(6);
 xeg0=abs((xxeg0-0.947))/0.679;
 %**** disp(xeg0);
@@ -52,6 +55,7 @@ taup1=1/(Nf1*1e7*1e-15);
 %**** disp(taup1);
 sim.material.istausrhp0(6)=taup1;
 
+% update overall thickness
 sim.optical.setup.nslices(6) = ceil(ls);
 % disp(sim.optical.setup.nslices(6));
 % sim.optical.setup.Nx = ceil(params.nmLx/3);
@@ -188,19 +192,10 @@ if sim.electrical.setup.FD == 0 %use HDG
     end
     sim.electrical.results.total_electrical = ...
         toc(sim.electrical.setup.start_electrical);
-
-    eta = sim.electrical.results.Wim2Pmax/10;
-    Jsc = sim.electrical.results.mAicm2Jsc;
-    JscOpt = sim.electrical.results.JscOpt;
-    Voc = sim.electrical.results.VVOC;
-    FF = sim.electrical.results.FF;
-    Vmax = sim.electrical.results.VVmax;
-
-
-
+    disp('Results computed by HDG')
 else %use FD
 
-    tic; computeFD; total_time= toc; %runs the FD method
+    tic; computeFD; total_time_FD= toc; %runs the FD method
 
 
     sim.electrical.results.Wim2Pmax = eta*10; %max power density
@@ -227,21 +222,24 @@ else %use FD
     sim.electrical.results.VVmax = mPpoint(1);
 
     %total time for electrical computation
-    sim.electrical.results.total_electrical =total_time;
+    sim.electrical.results.total_electrical =total_time_FD;
 
-    eta = sim.electrical.results.Wim2Pmax/10;
-    Jsc = sim.electrical.results.mAicm2Jsc;
-    JscOpt = sim.electrical.results.JscOpt;
-    Voc = sim.electrical.results.VVOC;
-    FF = sim.electrical.results.FF;
-    Vmax = sim.electrical.results.VVmax;
-
-    disp(['Time for optical solve= ',num2str(optical_toc),', Time for FD solve=',num2str(total_time)])
-    disp(['L_s=',num2str(ls),' , Eg0=',num2str(Eg0)])
-    disp(['eta = ',num2str(eta),'; Jsc = ',num2str(Jsc),'; Voc = ',...
-        num2str(Voc),'; FF = ', num2str(FF),...
-        '; Vmax = ',num2str(Vmax)]);
+    disp('Results computed by FD')
+    disp(['Time for optical solve= ',num2str(optical_toc),', Time for FD solve=',num2str(total_time_FD)])
 end
+eta = sim.electrical.results.Wim2Pmax/10;
+Jsc = sim.electrical.results.mAicm2Jsc;
+JscOpt = sim.electrical.results.JscOpt;
+Voc = sim.electrical.results.VVOC;
+FF = sim.electrical.results.FF;
+Vmax = sim.electrical.results.VVmax;
+disp('Input parameters:')
+disp(['L_s=',num2str(ls),' , Eg0=',num2str(Eg0)])
+disp('Results:')
+disp(['eta = ',num2str(eta),'; Jsc = ',num2str(Jsc),'; Voc = ',...
+    num2str(Voc),'; FF = ', num2str(FF),...
+    '; Vmax = ',num2str(Vmax)]);
+
 disp('Electrical done');
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
