@@ -1,9 +1,8 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 function [sim] = DesignJunctionCIGSRunSim()
 %JUNCTION Create a junction object.
-%If specified property is length 1,then
-%it will be made the correct length automatically.
-% Should probably be moved elsewhere
+
+
 sim.input = struct(...
     'Linear',0,...
     'nmLx', 500, ...     % Grating period
