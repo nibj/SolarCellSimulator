@@ -25,27 +25,20 @@ sim.optical.setup = struct(...
     ... % discretization along x direction 
     'Nx', 100, ...       % Number sample points in x-direction (for plotting)
     'nslices', [1, 1,1,100,35,250,1,1, 1], ... % Number of slices in each sec (DesignJunction.m), uses 1 if not set.
-    ... % Parameters for Nt convergence 
-... % Do we ever use this?  No!!
-    'CheckNtConvergence', 0, ... Use adaptive Nt (Use at own risk)
-    'Nttol', 1e9,...      % Required tolerance in mA/(nm cm^2) for increasing Nt by 2
-    'Nttol_lower', 1e-6, ...%  Required tolerance in mA/(nm cm^2) for decreasing Nt by 2 (used in serial calcs)
-    'minNt', 10, ...         % Start value for Nt (tom:40)  %  number of Floquet harmonics for RCWA
-    'maxNt', 40, ...        % Largest value for Nt (tom:40)
-    'nosuccreq', 2, ... % Number of successes required
-    'faillimit', 10, ... % Number of times worse before fail
-    'ptol', 0.1 ... % Predictive stepping toler
+    ... % number of Floquet harmonics for RCWA
+    'Nt', 10 ...         %   (e.g. 40) 
 );
     
 sim.electrical.setup = struct(...
     ... % Electrical Parameters
     'electrical_toggle', 1, ... % Toggle: 1 to run electrical simulation, 0 to skip
-    'VdV', 0.01, ... % Change in volrage 
+    'VdV', 0.01, ... % Change in voltage 
     ... % Simulation meshing
     'nslices', [1, 1,1,100,35,250,5,5, 1], ... % Number of slices in each sec (DesignJunction.m
     'nx_sec', [100,35,250], ... % Number of mesh points in each section (electrical)
     ...%Use FD or HDG method
     'FD', 1 , ... %Use the FD method(1) or 0 to use HDG
+    .... %****************************************
    ... % Start HDG parameters
     'pdeg',5, ... % Polynomial degree
 ... % what is this for  (take out)
@@ -89,9 +82,7 @@ sim.electrical.setup = struct(...
     'abstol', 1e-1, ... % Required absolute tolerance   
     'warn', 1, ... % Display warning messages
     'Jtol', 0.4, ... Standard is 0.1. Larger values allow more noisy J profile.
-... % do we do this
-    'forcepositive', 0, ... % Force the carriers to be positive
-    'test_J', 0, ... %Test the Jacobian
+    ... %'test_J', 0, ... %Test the Jacobian
     'PVrefinemax', 100, ... % Max refinement steps allowed
     'PVtol', 1e-3 ... % Tolerance for finding Pmax
 );
@@ -112,7 +103,7 @@ if diff > 0
 end
 
 % Set Nt to minNt
-sim.optical.setup.Nt = sim.optical.setup.minNt;
+%sim.optical.setup.Nt = sim.optical.setup.minNt;
 
 % Total step counter
 sim.electrical.setup.counter = 0;

@@ -1,6 +1,3 @@
-
-
-
 function sim = AnalyseAbs(sim, varargin)
 
 % If we are plotting fields, toggle so they are rebuilt

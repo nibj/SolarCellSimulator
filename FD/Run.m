@@ -1,4 +1,3 @@
-
 mplot = 1;
 N=size(G,1);
 h=ones(N,1)/N; %an array for h (for nanometer scaling)

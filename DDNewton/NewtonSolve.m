@@ -113,9 +113,9 @@ newsim.global.J = J;
 
 newsim.setup.counter = newsim.setup.counter + 1;
 
-if sim.setup.test_J
-    newsim = Test(newsim);
-end
+% if sim.setup.test_J
+%     newsim = Test(newsim);
+% end
 
 sim=newsim;
 
@@ -127,67 +127,6 @@ dx = -newsim.global.J\newsim.global.F;
 
 xnew = x + dx;
 newsim = globalcoeff2coeffs(xnew, newsim);
-
-% if sim.setup.forcepositive
-%     negtoggle = 1;
-%     localstepdamp = 1 + 0*dx;
-%     while negtoggle
-%         nnew = coeffs2sbp(newsim.coeffs.n, newsim);
-%         pnew = coeffs2sbp(newsim.coeffs.p, newsim);
-%         
-%         nnewroots = polyrootcount(nnew, minnp);
-%         pnewroots = polyrootcount(pnew, minnp);
-%         
-%         nhatneg = sign(newsim.coeffs.n_hat);
-%         phatneg = sign(newsim.coeffs.p_hat);
-%         
-%         if sum(nnewroots + pnewroots) + sum(nhatneg == -1 + phatneg==-1)== 0
-%             negtoggle = 0;
-%         else
-%             %Calculate local damp for poly coefficients
-%             
-%             newdamppc = localstepdamp(1:pdeg1:np);
-%             newdamppc((nnewroots+pnewroots)~=0) =  0.5 * newdamppc((nnewroots+pnewroots)~=0);
-%             
-%             if min(newdamppc((nnewroots+pnewroots)~=0))< 1e-16
-%                 newdamppc((nnewroots+pnewroots)~=0) = 0;
-%             end
-%             
-%             for j = 1:nx
-%                 for i = 1:pdeg1
-%                     index = (j-1)*pdeg1 + i;
-%                     localstepdamp(index) = newdamppc(j);
-%                 end
-%             end
-%             
-%             % Calculate local damp for skeleton values
-%             newdampskel = localstepdamp(2*np+1 : 2*np + nx-1);
-%             
-%             hatneg = nhatneg < minnp | phatneg < minnp;
-%             newdampskel(hatneg) = 0.5 * newdampskel(hatneg);
-%             
-%             
-%             localstepdamp(np+1 : 2*np) = localstepdamp(1: np);
-%             localstepdamp(2*np+1: 2*np + nx-1) = newdampskel;
-%             localstepdamp(2*np + nx-1 + 1 : 3*np + nx-1) = localstepdamp(1: np);
-%             localstepdamp(3*np + nx-1 + 1 : 4*np + nx-1) = localstepdamp(1: np);
-%             localstepdamp(4*np+ nx-1 + 1: 4*np + 2*nx-2) = newdampskel;
-%             localstepdamp(4*np+1 + 2*nx - 2 : 5*np + 2*nx - 2) = localstepdamp(1: np);
-%             localstepdamp(5*np+1 + 2*nx - 2 : 6*np + 2*nx - 2) = localstepdamp(1: np);
-%             localstepdamp(6*np + 2*nx - 2 +1: 6*np + 3*nx-3) = newdampskel;
-%         end
-%     end
-%     if sum(localstepdamp)/length(localstepdamp) ~= 1
-%         %displayResults(newsim);
-%         %subplot(sim.setup.plotlayout(1), sim.setup.plotlayout(2), sim.setup.plotlayout(1) * sim.setup.plotlayout(2));
-%         %plot(log(localstepdamp));
-%         %drawnow;
-%     end
-%     
-%     xnew = x + localstepdamp .* dx;
-%     newsim = globalcoeff2coeffs(xnew, newsim);
-%     
-% end
 
 abschange = sum(abs(dx));
 relchange = sum(abs(dx./(abs(x)+1)));
