@@ -1,4 +1,6 @@
 function sim = AnalyseAbs(sim, varargin)
+%
+% absorption analysys for optical studies
 
 % If we are plotting fields, toggle so they are rebuilt
 if sim.setup.Eplot || sim.setup.Hplot

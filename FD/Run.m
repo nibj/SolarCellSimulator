@@ -68,9 +68,8 @@ for i=1:1000
 
     end
     J = Jn+Jp;
-    verbose = 1;
-    if verbose == 1
-    %clc;
+    if sim.electrical.setup.SolverSteps == 1
+    clc;
     disp('')
     disp('Using FD method')
     disp('************************************')

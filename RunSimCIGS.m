@@ -12,7 +12,6 @@ addpath(genpath('./FD'))
 % Create the simulations
 sim = DesignJunctionCIGSRunSim();
 sim = DesignSimCIGSRunSim(sim);
-%CSun=1;
 
 %ls=input("Please enter thickness of CIGS layer between 100 nm and 2200 nm: Ls= ");
 ls=200

@@ -1,4 +1,3 @@
-
 function [ sim ] = initializeSim( sim )
 % sim = initialiseSim(sim)
 % Initialises all of the permatnent matrices in the simulation.

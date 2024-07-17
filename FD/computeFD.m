@@ -63,7 +63,8 @@ function sim=computeFD(sim)
     %save('DataCIGS.mat','G','phin','phip','mun','mup','n1','p1','taun',...
     %'taup','Nf','lambda','phi0','phiN','n0','nN','p0','pN',...
     %'phin0','phinN','phip0','phipN','nbar','Jscale','npscale','Gscale','Vth')
-    Run; JVcurve; 
+    Run; 
+    JVcurve; 
 
 
 
